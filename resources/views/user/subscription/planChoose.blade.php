@@ -1,4 +1,7 @@
 @extends('layouts.user')
+@section('css')
+    <script src="https://js.stripe.com/v3/"></script>
+    @endsection
 @section('user')
     <div class="content-header">
         <div class="container-fluid">
@@ -33,9 +36,25 @@
 
                     <tr>
                         <td>
-                            <a href="{{route('user.payment.stripe')}}"><button class="btn btn-primary btn-sm">Pay By Stripe</button></a>
-                            <button class="btn btn-primary btn-sm">Pay By Paypal</button>
+                            <a href="{{route('user.payment.stripe',$plan->id)}}"><button class="btn btn-primary btn-sm">Pay By Stripe</button></a>
+{{--                            <form action="{{route('user.payment.stripe.submit')}}" method="POST">--}}
+{{--                                @csrf--}}
+{{--                                <script--}}
+{{--                                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"--}}
+{{--                                    data-key="pk_test_ceyoY7uA4tKyBOj065u9H4YN00Emw5XrJ1"--}}
+{{--                                    data-amount="{{$plan->plan_amount}}"--}}
+{{--                                    data-name="{{$plan->plan_name}}"--}}
+{{--                                    data-plan-id="{{$plan->id}}"--}}
+{{--                                    data-description="{{$plan->plan_description}}"--}}
+{{--                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"--}}
+{{--                                    data-locale="auto"--}}
+{{--                                    data-currency="usd">--}}
+{{--                                </script>--}}
+{{--                                <input>--}}
+{{--                            </form>--}}
+{{--                            <button class="btn btn-primary btn-sm">Pay By Paypal</button>--}}
                         </td>
+
 
                     </tr>
 
@@ -47,3 +66,4 @@
 
     </div>
 @endsection
+

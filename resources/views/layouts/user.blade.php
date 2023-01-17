@@ -46,9 +46,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
             <li class="nav-item">
-                <a class="nav-link" href="{{route('user.login')}}">
+                <a class="nav-link" href="{{ route('logout') }}"
+                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-in-alt"></i>
                 </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </li>
         </ul>
     </nav>
@@ -106,6 +111,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <i class="nav-icon fas fa-th"></i>
                             <p>
                                 Subscription plan
+
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('user.my.plan')}}" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                My plan
 
                             </p>
                         </a>

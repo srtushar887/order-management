@@ -39,8 +39,13 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/subscription/plan/choose/{id}', [Controllers\User\UserSubscriptionController::class,'plan_choose'])->name('user.choose.plan');
 
         //user payment
-        Route::get('/payment/stripe', [Controllers\User\UserPaymentController::class,'pay_stripe'])->name('user.payment.stripe');
+        Route::get('/payment/stripe/{id}', [Controllers\User\UserPaymentController::class,'pay_stripe'])->name('user.payment.stripe');
         Route::post('/payment/stripe/submit', [Controllers\User\UserPaymentController::class,'pay_stripe_submit'])->name('user.payment.stripe.submit');
+
+        //my plan
+        Route::get('/my/plan', [Controllers\User\UserSubscriptionController::class,'my_plan'])->name('user.my.plan');
+        Route::post('/my/plan/change', [Controllers\User\UserSubscriptionController::class,'my_plan_change'])->name('user.plan.change');
+
     });
 });
 Route::get('/admin/logout', [Controllers\Auth\CustomLoginController::class,'admin_logout'])->name('admin.logout');
@@ -54,5 +59,13 @@ Route::group(['middleware' => ['auth:admin']], function () {
         Route::post('/subscription/plan/save', [Controllers\Admin\AdminSubscriptionController::class,'plan_save'])->name('admin.subscription.plan.save');
         Route::post('/subscription/plan/update', [Controllers\Admin\AdminSubscriptionController::class,'plan_update'])->name('admin.subscription.plan.update');
         Route::post('/subscription/plan/delete', [Controllers\Admin\AdminSubscriptionController::class,'plan_delete'])->name('admin.subscription.plan.delete');
+
+        //user plans
+        Route::get('/user/plans', [Controllers\Admin\AdminSubscriptionController::class,'user_plans'])->name('admin.users.plan');
+        Route::post('/user/plan/update', [Controllers\Admin\AdminSubscriptionController::class,'user_plans_update'])->name('admin.user.plan.update');
+
+        //user custom order
+        Route::get('/user/custom/order', [Controllers\Admin\AdminSubscriptionController::class,'user_custom_order'])->name('admin.custom.order');
+        Route::post('/user/custom/order/save', [Controllers\Admin\AdminSubscriptionController::class,'user_custom_order_save'])->name('admin.custom.order.save');
     });
 });

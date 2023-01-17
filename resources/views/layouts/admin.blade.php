@@ -94,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <a href="{{route('admin.dashboard')}}" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
-                                Simple Link
+                                Dashboard
 
                             </p>
                         </a>
@@ -105,6 +105,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <i class="nav-icon fas fa-th"></i>
                             <p>
                                 Subscription plan
+
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('admin.users.plan')}}" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                User Plans
+
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('admin.custom.order')}}" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Custom Orders
 
                             </p>
                         </a>

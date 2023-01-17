@@ -1,14 +1,16 @@
-@extends('layouts.user')
-@section('user')
+@extends('layouts.admin')
+@section('admin')
 
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Subscription Plan</h1>
+                    <h1 class="m-0">User Plan</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
 
+                    </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -35,29 +37,36 @@
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                         <tr>
+                            <th>User Name</th>
                             <th>Plan Name</th>
                             <th>Plan Amount</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($plans as $plan)
+                        @foreach($user_plans as $plan)
                             <tr>
-                                <td>{{$plan->plan_name}}</td>
-                                <td>${{number_format($plan->plan_amount,2)}}</td>
+                                <td>{{$plan->user->name ?? ''}}</td>
+                                <td>{{$plan->plan->plan_name ?? ''}}</td>
+                                <td>${{number_format($plan->plan->plan_amount,2)}}</td>
                                 <td>
-                                    @if($user_plan_count <= 0)
-                                    <a href="{{route('user.choose.plan',$plan->id)}}">
-                                        <button class="btn btn-primary btn-sm" ><i class="fas fa-shopping-cart"></i> </button>
-                                    </a>
+                                    @if($plan->status == 0)
+                                        InActive
+                                    @elseif($plan->status == 1)
+                                        Active
                                     @else
-                                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#upgradeplan{{$plan->id}}"><i class="fas fa-shopping-cart"></i> </button>
+                                        Not Set
                                     @endif
                                 </td>
+                                <td>{{\Carbon\Carbon::parse($plan->purchase_date)->format('Y-m-d')}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editplan{{$plan->id}}"><i class="fas fa-edit"></i> </button>
+
+                                </td>
                             </tr>
-
-
-                            <div class="modal fade" id="upgradeplan{{$plan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="editplan{{$plan->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -66,11 +75,16 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form action="{{route('user.plan.change')}}" method="post">
+                                        <form action="{{route('admin.user.plan.update')}}" method="post">
                                             @csrf
                                             <div class="modal-body">
                                                 <div class="col-md-12">
-                                                    are you sure to change you plan with this ?
+                                                    <label>Plan Status</label>
+                                                    <select class="form-control" name="plan_status">
+                                                        <option value="">select any</option>
+                                                        <option value="1" {{$plan->status == 1 ?'selected' : ''}}>Active</option>
+                                                        <option value="0" {{$plan->status == 0 ?'selected' : ''}}>Inactive</option>
+                                                    </select>
                                                     <input type="hidden" name="user_plan_id" value="{{$plan->id}}">
                                                 </div>
                                             </div>
@@ -83,17 +97,17 @@
                                 </div>
                             </div>
 
-
                         @endforeach
 
                         </tbody>
                     </table>
                 </div>
-                {{$plans->links()}}
+                {{$user_plans->links()}}
             </div>
 
         </div>
     </div>
+
 
 
 
