@@ -127,6 +127,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{route('admin.create.user')}}" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Create User
+
+                            </p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->

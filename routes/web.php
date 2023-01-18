@@ -30,6 +30,7 @@ Route::middleware([
 
 
 
+
 Route::group(['middleware' => ['auth']], function() {
     Route::group(['prefix' => 'user'], function (){
         Route::get('/dashboard', [Controllers\User\UserController::class,'dashboard'])->name('user.dashboard');
@@ -67,5 +68,9 @@ Route::group(['middleware' => ['auth:admin']], function () {
         //user custom order
         Route::get('/user/custom/order', [Controllers\Admin\AdminSubscriptionController::class,'user_custom_order'])->name('admin.custom.order');
         Route::post('/user/custom/order/save', [Controllers\Admin\AdminSubscriptionController::class,'user_custom_order_save'])->name('admin.custom.order.save');
+
+        //user manage
+        Route::get('/user/create', [Controllers\Admin\AdminUserController::class,'create_user'])->name('admin.create.user');
+        Route::post('/user/create/save', [Controllers\Admin\AdminUserController::class,'create_user_save'])->name('admin.user.save');
     });
 });
