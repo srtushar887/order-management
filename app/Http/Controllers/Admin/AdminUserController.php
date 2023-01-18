@@ -11,7 +11,8 @@ class AdminUserController extends Controller
 {
     public function create_user()
     {
-        return view('admin.user.createUser');
+        $all_users = User::paginate(20);
+        return view('admin.user.createUser', compact('all_users'));
     }
 
     public function create_user_save(Request $request)

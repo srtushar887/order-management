@@ -45,67 +45,74 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>${{$plan->plan->plan_name ?? ''}}</td>
-                            <td>${{number_format($plan->plan->plan_amount,2)}}</td>
-                            <td>
-                                @if($plan->status == 0)
-                                    InActive
-                                @elseif($plan->status == 1)
-                                    Active
-                                @else
-                                    Not Set
-                                @endif
-                            </td>
-                            <td>{{\Carbon\Carbon::parse($plan->created_date)->format('Y-m-d')}}</td>
-                            <td>
-                                @if($plan->status != 1)
-                                    <a href="{{route('user.payment.stripe',$plan->plan_id)}}">
-                                        <button class="btn btn-primary btn-sm"><i class="fas fa-dollar-sign"></i>
-                                        </button>
-                                    </a>
-                                @endif
+                        @if($plan)
+                            <tr>
+                                <td>${{$plan->plan->plan_name ?? ''}}</td>
 
+                                <td>${{number_format($plan->plan->plan_amount ?? 0,2)}}
 
-                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#upgradeplan"><i
-                                        class="fas fa-shopping-cart"></i></button>
-
-                            </td>
-                        </tr>
-
-
-                        <div class="modal fade" id="upgradeplan" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Upgrade Plan</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form action="{{route('user.plan.change')}}" method="post">
-                                        @csrf
-                                        <div class="modal-body">
-                                            <div class="col-md-12">
-                                                <label>Choose Plan</label>
-                                                <select class="form-control" name="user_plan_id">
-                                                    <option value="">select any</option>
-                                                    @foreach($all_plans as $plan)
-                                                        <option value="{{$plan->id}}">{{$plan->plan_name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                </td>
+                                <td>
+                                    @if($plan->status == 0 )
+                                        InActive
+                                    @elseif($plan->status == 1 )
+                                        Active
+                                    @else
+                                        Not Set
+                                    @endif
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($plan->created_date)->format('Y-m-d')}}</td>
+                                <td>
+                                    @if($plan->status != 1 )
+                                        <a href="{{route('user.payment.stripe',$plan->plan_id)}}">
+                                            <button class="btn btn-primary btn-sm"><i class="fas fa-dollar-sign"></i>
                                             </button>
-                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </a>
+                                    @endif
+
+
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal"
+                                            data-target="#upgradeplan"><i
+                                            class="fas fa-shopping-cart"></i></button>
+
+                                </td>
+                            </tr>
+
+
+                            <div class="modal fade" id="upgradeplan" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Upgrade Plan</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
-                                    </form>
+                                        <form action="{{route('user.plan.change')}}" method="post">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <div class="col-md-12">
+                                                    <label>Choose Plan</label>
+                                                    <select class="form-control" name="user_plan_id">
+                                                        <option value="">select any</option>
+                                                        @foreach($all_plans as $plan)
+                                                            <option value="{{$plan->id}}">{{$plan->plan_name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
 
                         </tbody>

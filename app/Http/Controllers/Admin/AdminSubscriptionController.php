@@ -77,7 +77,7 @@ class AdminSubscriptionController extends Controller
 
         if ($check_user_plan) {
             $check_user_plan->plan_id = $request->plan_id;
-            $check_user_plan->status = 1;
+            $check_user_plan->status = $request->status;
             $check_user_plan->purchase_date = Carbon::now();
             $check_user_plan->save();
         } else {
