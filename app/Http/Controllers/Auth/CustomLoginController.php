@@ -27,9 +27,10 @@ class CustomLoginController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
+        $user->credit = 0;
         $user->save();
 
-        return redirect(route('login'))->with('success','Account Successfully Created');
+        return redirect(route('login'))->with('success', 'Account Successfully Created');
 
 
     }
@@ -44,9 +45,9 @@ class CustomLoginController extends Controller
 
         if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
             return redirect(route('admin.dashboard'));
-        }elseif (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)){
+        } elseif (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
             return redirect(route('user.dashboard'));
-        }  else {
+        } else {
             return back()->with('login_error', 'Invalid Credentials');
         }
     }

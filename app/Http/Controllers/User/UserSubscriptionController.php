@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\credit_plan;
 use App\Models\subscription_plan;
 use App\Models\user_plan;
 use Illuminate\Http\Request;
@@ -38,6 +39,20 @@ class UserSubscriptionController extends Controller
 
     public function my_plan_change(Request $request)
     {
-        return redirect(route('user.payment.stripe', $request->user_plan_id));
+        return redirect(route('user.payment.stripe', ['id' => $request->user_plan_id, 'type' => 1]));
+    }
+
+
+    public function credit_plan()
+    {
+        $plans = credit_plan::where('plan_status', 0)->paginate(20);
+        return view('user.credit.planList', compact('plans'));
+    }
+
+
+    public function credit_plan_save(Request $request)
+    {
+        $plan = credit_plan::where('id', $request->user_plan_id)->first();
+        return redirect(route('user.payment.stripe', ['id' => $plan->id, 'type' => 2]));
     }
 }

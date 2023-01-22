@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,9 +15,9 @@ use App\Http\Controllers;
 */
 
 
-Route::get('/', [Controllers\Auth\CustomLoginController::class,'user_login'])->name('user.login');
-Route::post('/custom/register', [Controllers\Auth\CustomLoginController::class,'user_register'])->name('user.custom.register');
-Route::post('/custom/login/submit', [Controllers\Auth\CustomLoginController::class,'user_login_submit'])->name('user.custom.login.submit');
+Route::get('/', [Controllers\Auth\CustomLoginController::class, 'user_login'])->name('user.login');
+Route::post('/custom/register', [Controllers\Auth\CustomLoginController::class, 'user_register'])->name('user.custom.register');
+Route::post('/custom/login/submit', [Controllers\Auth\CustomLoginController::class, 'user_login_submit'])->name('user.custom.login.submit');
 
 Route::middleware([
     'auth:sanctum',
@@ -29,48 +30,61 @@ Route::middleware([
 });
 
 
-
-
-Route::group(['middleware' => ['auth']], function() {
-    Route::group(['prefix' => 'user'], function (){
-        Route::get('/dashboard', [Controllers\User\UserController::class,'dashboard'])->name('user.dashboard');
+Route::group(['middleware' => ['auth']], function () {
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/dashboard', [Controllers\User\UserController::class, 'dashboard'])->name('user.dashboard');
 
         //user subscription plan
-        Route::get('/subscription/plan', [Controllers\User\UserSubscriptionController::class,'plan_list'])->name('user.subscription.plan');
-        Route::get('/subscription/plan/choose/{id}', [Controllers\User\UserSubscriptionController::class,'plan_choose'])->name('user.choose.plan');
+        Route::get('/subscription/plan', [Controllers\User\UserSubscriptionController::class, 'plan_list'])->name('user.subscription.plan');
+        Route::get('/subscription/plan/choose/{id}', [Controllers\User\UserSubscriptionController::class, 'plan_choose'])->name('user.choose.plan');
+
+        // user credit plan
+        Route::get('/credit/plan/', [Controllers\User\UserSubscriptionController::class, 'credit_plan'])->name('user.credit.plan');
+        Route::post('/credit/plan/save', [Controllers\User\UserSubscriptionController::class, 'credit_plan_save'])->name('user.credit.plan.save');
 
         //user payment
-        Route::get('/payment/stripe/{id}', [Controllers\User\UserPaymentController::class,'pay_stripe'])->name('user.payment.stripe');
-        Route::post('/payment/stripe/submit', [Controllers\User\UserPaymentController::class,'pay_stripe_submit'])->name('user.payment.stripe.submit');
+        Route::get('/payment/stripe/{id}/{type}', [Controllers\User\UserPaymentController::class, 'pay_stripe'])->name('user.payment.stripe');
+        Route::post('/payment/stripe/submit', [Controllers\User\UserPaymentController::class, 'pay_stripe_submit'])->name('user.payment.stripe.submit');
 
         //my plan
-        Route::get('/my/plan', [Controllers\User\UserSubscriptionController::class,'my_plan'])->name('user.my.plan');
-        Route::post('/my/plan/change', [Controllers\User\UserSubscriptionController::class,'my_plan_change'])->name('user.plan.change');
+        Route::get('/my/plan', [Controllers\User\UserSubscriptionController::class, 'my_plan'])->name('user.my.plan');
+        Route::post('/my/plan/change', [Controllers\User\UserSubscriptionController::class, 'my_plan_change'])->name('user.plan.change');
+
+        //email download
+        Route::get('/email/download', [Controllers\User\UserEmailController::class, 'email_download'])->name('user.email.download');
+        Route::get('/email/download/save/{id}', [Controllers\User\UserEmailController::class, 'email_download_save'])->name('user.email.download.save');
 
     });
 });
-Route::get('/admin/logout', [Controllers\Auth\CustomLoginController::class,'admin_logout'])->name('admin.logout');
+Route::get('/admin/logout', [Controllers\Auth\CustomLoginController::class, 'admin_logout'])->name('admin.logout');
 
 Route::group(['middleware' => ['auth:admin']], function () {
     Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', [Controllers\Admin\AdminController::class,'dashboard'])->name('admin.dashboard');
+        Route::get('/dashboard', [Controllers\Admin\AdminController::class, 'dashboard'])->name('admin.dashboard');
 
         //subscription plan
-        Route::get('/subscription/plan', [Controllers\Admin\AdminSubscriptionController::class,'plan_list'])->name('admin.subscription.plan');
-        Route::post('/subscription/plan/save', [Controllers\Admin\AdminSubscriptionController::class,'plan_save'])->name('admin.subscription.plan.save');
-        Route::post('/subscription/plan/update', [Controllers\Admin\AdminSubscriptionController::class,'plan_update'])->name('admin.subscription.plan.update');
-        Route::post('/subscription/plan/delete', [Controllers\Admin\AdminSubscriptionController::class,'plan_delete'])->name('admin.subscription.plan.delete');
+        Route::get('/subscription/plan', [Controllers\Admin\AdminSubscriptionController::class, 'plan_list'])->name('admin.subscription.plan');
+        Route::post('/subscription/plan/save', [Controllers\Admin\AdminSubscriptionController::class, 'plan_save'])->name('admin.subscription.plan.save');
+        Route::post('/subscription/plan/update', [Controllers\Admin\AdminSubscriptionController::class, 'plan_update'])->name('admin.subscription.plan.update');
+        Route::post('/subscription/plan/delete', [Controllers\Admin\AdminSubscriptionController::class, 'plan_delete'])->name('admin.subscription.plan.delete');
+
+        //credit plan
+        Route::get('/credit/plans', [Controllers\Admin\AdminSubscriptionController::class, 'credit_plan'])->name('admin.credit.plan');
+        Route::post('/credit/plan/save', [Controllers\Admin\AdminSubscriptionController::class, 'credit_plan_save'])->name('admin.credit.plan.save');
+        Route::post('/credit/plan/update', [Controllers\Admin\AdminSubscriptionController::class, 'credit_plan_update'])->name('admin.credit.plan.update');
+        Route::post('/credit/plan/delete', [Controllers\Admin\AdminSubscriptionController::class, 'credit_plan_delete'])->name('admin.credit.plan.delete');
+        Route::get('/credit/user/list', [Controllers\Admin\AdminSubscriptionController::class, 'credit_user_list'])->name('admin.credit.user.list');
 
         //user plans
-        Route::get('/user/plans', [Controllers\Admin\AdminSubscriptionController::class,'user_plans'])->name('admin.users.plan');
-        Route::post('/user/plan/update', [Controllers\Admin\AdminSubscriptionController::class,'user_plans_update'])->name('admin.user.plan.update');
+        Route::get('/user/plans', [Controllers\Admin\AdminSubscriptionController::class, 'user_plans'])->name('admin.users.plan');
+        Route::post('/user/plan/update', [Controllers\Admin\AdminSubscriptionController::class, 'user_plans_update'])->name('admin.user.plan.update');
 
         //user custom order
-        Route::get('/user/custom/order', [Controllers\Admin\AdminSubscriptionController::class,'user_custom_order'])->name('admin.custom.order');
-        Route::post('/user/custom/order/save', [Controllers\Admin\AdminSubscriptionController::class,'user_custom_order_save'])->name('admin.custom.order.save');
+        Route::get('/user/custom/order', [Controllers\Admin\AdminSubscriptionController::class, 'user_custom_order'])->name('admin.custom.order');
+        Route::post('/user/custom/order/save', [Controllers\Admin\AdminSubscriptionController::class, 'user_custom_order_save'])->name('admin.custom.order.save');
 
         //user manage
-        Route::get('/user/create', [Controllers\Admin\AdminUserController::class,'create_user'])->name('admin.create.user');
-        Route::post('/user/create/save', [Controllers\Admin\AdminUserController::class,'create_user_save'])->name('admin.user.save');
+        Route::get('/user/create', [Controllers\Admin\AdminUserController::class, 'create_user'])->name('admin.create.user');
+        Route::post('/user/create/save', [Controllers\Admin\AdminUserController::class, 'create_user_save'])->name('admin.user.save');
     });
 });

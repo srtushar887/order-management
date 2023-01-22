@@ -18,12 +18,11 @@
         }
 
 
-
         .card {
             max-width: 500px;
             margin: auto;
             color: black;
-            border-radius: 20 px;
+            border-radius: 20px;
         }
 
         p {
@@ -56,7 +55,6 @@
             color: #fff;
             text-decoration: none;
         }
-
 
 
         .btn.btn-primary:hover .fas.fa-arrow-right {
@@ -97,39 +95,44 @@
 <div class="container p-0">
     <form action="{{route('user.payment.stripe.submit')}}" method="post">
         @csrf
-    <div class="card px-4">
-        <p class="h8 py-3">Payment Details</p>
-        <div class="row gx-3">
-            <div class="col-12">
-                <div class="d-flex flex-column">
-                    <p class="text mb-1">Person Name</p>
-                    <input class="form-control mb-3" type="text" placeholder="Name" name="personam_name">
-                    <input class="form-control mb-3" type="hidden" placeholder="Name" name="plan_id" value="{{$plan->id}}">
+        <div class="card px-4">
+            <p class="h8 py-3">Payment Details</p>
+            <div class="row gx-3">
+                <div class="col-12">
+                    <div class="d-flex flex-column">
+                        <p class="text mb-1">Person Name</p>
+                        <input class="form-control mb-3" type="text" placeholder="Name" name="personam_name">
+                        <input class="form-control mb-3" type="hidden" placeholder="Name" name="plan_id"
+                               value="{{$plan->id}}">
+                        <input class="form-control mb-3" type="hidden" placeholder="Name" name="plan_type"
+                               value="{{$plan_type}}">
+                        <input class="form-control mb-3" type="hidden" placeholder="Name" name="plan_amount"
+                               value="{{$plan->plan_amount}}">
+                    </div>
                 </div>
-            </div>
-            <div class="col-12">
-                <div class="d-flex flex-column">
-                    <p class="text mb-1">Card Number</p>
-                    <input class="form-control mb-3" type="text" placeholder="" name="card">
+                <div class="col-12">
+                    <div class="d-flex flex-column">
+                        <p class="text mb-1">Card Number</p>
+                        <input class="form-control mb-3" type="text" placeholder="" name="card">
+                    </div>
                 </div>
-            </div>
-            <div class="col-6">
-                <div class="d-flex flex-column">
-                    <p class="text mb-1">Expiry</p>
-                    <input class="form-control mb-3" type="text" placeholder="MM/YYYY" name="expire">
+                <div class="col-6">
+                    <div class="d-flex flex-column">
+                        <p class="text mb-1">Expiry</p>
+                        <input class="form-control mb-3" type="text" placeholder="MM/YYYY" name="expire">
+                    </div>
                 </div>
-            </div>
-            <div class="col-6">
-                <div class="d-flex flex-column">
-                    <p class="text mb-1">CVV/CVC</p>
-                    <input class="form-control mb-3 pt-2 " type="password" placeholder="***" name="cvc">
+                <div class="col-6">
+                    <div class="d-flex flex-column">
+                        <p class="text mb-1">CVV/CVC</p>
+                        <input class="form-control mb-3 pt-2 " type="password" placeholder="***" name="cvc">
+                    </div>
                 </div>
-            </div>
-            <div class="col-12">
-                <button class="btn btn-primary mb-3" type="submit">adasd</button>
+                <div class="col-12">
+                    <button class="btn btn-primary mb-3" type="submit">adasd</button>
+                </div>
             </div>
         </div>
-    </div>
     </form>
 </div>
 </body>

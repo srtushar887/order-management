@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             $user->name = $faker->name;
             $user->email = $faker->email;
             $user->password = Hash::make('12345678');
+            $user->credit = 0;
             $user->save();
         }
 

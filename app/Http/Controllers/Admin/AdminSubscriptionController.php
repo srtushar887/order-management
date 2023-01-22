@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\credit_plan;
 use App\Models\subscription_plan;
 use App\Models\User;
+use App\Models\user_credit_plan;
 use App\Models\user_plan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -91,6 +93,52 @@ class AdminSubscriptionController extends Controller
 
 
         return back()->with('success', 'Plan Successfully Assigned');
+    }
+
+
+    public function credit_plan()
+    {
+        $all_plans = credit_plan::orderBy('id', 'desc')->paginate(20);
+        return view('admin.credit.creditPlan', compact('all_plans'));
+    }
+
+    public function credit_plan_save(Request $request)
+    {
+        $plan = new credit_plan();
+        $plan->plan_name = $request->plan_name;
+        $plan->plan_amount = $request->plan_amount;
+        $plan->plan_credit = $request->plan_credit;
+        $plan->plan_status = $request->plan_status;
+        $plan->save();
+
+        return back()->with('success', 'Credit Plan Successfully Created');
+    }
+
+    public function credit_plan_update(Request $request)
+    {
+        $plan = credit_plan::where('id', $request->plan_edit_id)->first();
+        $plan->plan_name = $request->plan_name;
+        $plan->plan_amount = $request->plan_amount;
+        $plan->plan_credit = $request->plan_credit;
+        $plan->plan_status = $request->plan_status;
+        $plan->save();
+
+        return back()->with('success', 'Credit Plan Successfully Updated');
+    }
+
+    public function credit_plan_delete(Request $request)
+    {
+        $plan = credit_plan::where('id', $request->plan_delete_id)->first();
+        $plan->delete();
+        return back()->with('success', 'Credit Plan Successfully Deleted');
+
+    }
+
+
+    public function credit_user_list()
+    {
+        $user_credit = user_credit_plan::with(['user', 'plan'])->orderBy('id', 'desc')->paginate(20);
+        return view('admin.credit.creditUserList', compact('user_credit'));
     }
 
 
