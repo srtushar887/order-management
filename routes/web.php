@@ -54,6 +54,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/email/download', [Controllers\User\UserEmailController::class, 'email_download'])->name('user.email.download');
         Route::get('/email/download/save/{id}', [Controllers\User\UserEmailController::class, 'email_download_save'])->name('user.email.download.save');
 
+        //billing
+        Route::get('/billing', [Controllers\User\UserBillingController::class, 'billing'])->name('user.billing');
+        Route::get('/add/cart/{plan_id}/{type}', [Controllers\User\UserBillingController::class, 'add_cart'])->name('user.add.cart');
+        Route::get('/view/cart', [Controllers\User\UserBillingController::class, 'view_cart'])->name('user.view.cart');
+        Route::get('/cart/data/remove/{id}', [Controllers\User\UserBillingController::class, 'cart_data_remove'])->name('user.cart.remove');
+        Route::get('/user/checkout', [Controllers\User\UserBillingController::class, 'checkout_user'])->name('user.checkout');
+
     });
 });
 Route::get('/admin/logout', [Controllers\Auth\CustomLoginController::class, 'admin_logout'])->name('admin.logout');
