@@ -40,7 +40,8 @@
 <body>
 <div class="container">
     <h1 class="h3 mb-5">Payment</h1>
-    <form>
+    <form action="{{route('user.checkout.submit')}}" method="post">
+        @csrf
         <div class="row">
 
 
@@ -79,25 +80,28 @@
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control" placeholder="">
+                                            <input type="text" class="form-control" name="name"
+                                                   value="{{Auth::user()->name}}" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label class="form-label">Email</label>
-                                            <input type="text" class="form-control" placeholder="MM/YY">
+                                            <input type="text" class="form-control" name="email"
+                                                   value="{{Auth::user()->email}}"
+                                                   placeholder="MM/YY">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label class="form-label">Phone Number</label>
-                                            <input type="password" class="form-control">
+                                            <input type="password" class="form-control" name="phone">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Address</label>
-                                            <input type="password" class="form-control">
+                                            <input type="password" class="form-control" name="address">
                                         </div>
                                     </div>
                                 </div>
@@ -111,25 +115,26 @@
                             <div class="accordion-body">
                                 <div class="mb-3">
                                     <label class="form-label">Card Number</label>
-                                    <input type="text" class="form-control" placeholder="">
+                                    <input type="text" class="form-control" name="card" placeholder="">
+
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name on card</label>
-                                            <input type="text" class="form-control" placeholder="">
+                                            <input type="text" class="form-control" name="card_name" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="mb-3">
                                             <label class="form-label">Expiry date</label>
-                                            <input type="text" class="form-control" placeholder="MM/YY">
+                                            <input type="text" class="form-control" name="expire" placeholder="MM/YY">
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="mb-3">
                                             <label class="form-label">CVV Code</label>
-                                            <input type="password" class="form-control">
+                                            <input type="password" class="form-control" name="cvc">
                                         </div>
                                     </div>
                                 </div>
@@ -142,22 +147,26 @@
             </div>
 
             <!-- Right -->
+            <?php
+            $carts = \Gloudemans\Shoppingcart\Facades\Cart::content();
+            $subtotal = \Gloudemans\Shoppingcart\Facades\Cart::content()->sum('price');
+            $counts = \Gloudemans\Shoppingcart\Facades\Cart::content()->count();
+            ?>
+            <input type="hidden" class="form-control" name="plan_amount" value="{{number_format($subtotal,2)}}"
+            >
+
             <div class="col-lg-3">
                 <div class="card position-sticky top-0">
                     <div class="p-3 bg-light bg-opacity-10">
                         <h6 class="card-title mb-3">Order Summary</h6>
                         <div class="d-flex justify-content-between mb-1 small">
-                            <span>Subtotal</span> <span>$214.50</span>
+                            <span>Subtotal</span> <span>${{number_format($subtotal,2)}}</span>
                         </div>
-                        <div class="d-flex justify-content-between mb-1 small">
-                            <span>Shipping</span> <span>$20.00</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-1 small">
-                            <span>Coupon (Code: NEWYEAR)</span> <span class="text-danger">-$10.00</span>
-                        </div>
+
+
                         <hr>
                         <div class="d-flex justify-content-between mb-4 small">
-                            <span>TOTAL</span> <strong class="text-dark">$224.50</strong>
+                            <span>TOTAL</span> <strong class="text-dark">${{number_format($subtotal,2)}}</strong>
                         </div>
                         <div class="form-check mb-1 small">
                             <input class="form-check-input" type="checkbox" value="" id="tnc">

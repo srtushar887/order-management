@@ -5,8 +5,11 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\credit_plan;
 use App\Models\subscription_plan;
+use App\Models\user_order;
+use App\Models\user_order_detail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserBillingController extends Controller
 {
@@ -57,5 +60,19 @@ class UserBillingController extends Controller
     public function checkout_user()
     {
         return view('user.billing.checkout');
+    }
+
+
+    public function user_invoice()
+    {
+        $orders = user_order::where('user_id', Auth::user()->id)->paginate(20);
+        return view('user.billing.invoiceList', compact('orders'));
+    }
+
+    public function user_invoice_details($id)
+    {
+        $orders = user_order::where('id', $id)->paginate(20);
+        $orders_details = user_order_detail::where('order_id', $id)->get();
+        return view('user.billing.invoiceDetails', compact('orders', 'orders_details'));
     }
 }

@@ -74,6 +74,11 @@
                     </svg>
                     Continue shopping</a></h2>
             <!-- Item-->
+            <?php
+            $carts = \Gloudemans\Shoppingcart\Facades\Cart::content();
+            $subtotal = \Gloudemans\Shoppingcart\Facades\Cart::content()->sum('price');
+            $counts = \Gloudemans\Shoppingcart\Facades\Cart::content()->count();
+            ?>
             @foreach($cart_data as $data)
                 <div class="d-sm-flex justify-content-between my-4 pb-4 border-bottom">
                     <div class="media d-block d-sm-flex text-center text-sm-left">
@@ -129,7 +134,8 @@
         <!-- Sidebar-->
         <div class="col-xl-3 col-md-4 pt-3 pt-md-0">
             <h2 class="h6 px-4 py-3 bg-secondary text-center">Subtotal</h2>
-            <div class="h3 font-weight-semibold text-center py-3">$325.00</div>
+
+            <div class="h3 font-weight-semibold text-center py-3">${{number_format($subtotal,2)}}</div>
             <hr>
 
 

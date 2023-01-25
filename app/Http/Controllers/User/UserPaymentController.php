@@ -7,8 +7,11 @@ use App\Models\credit_plan;
 use App\Models\subscription_plan;
 use App\Models\User;
 use App\Models\user_credit_plan;
+use App\Models\user_order;
+use App\Models\user_order_detail;
 use App\Models\user_plan;
 use Carbon\Carbon;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,7 +41,48 @@ class UserPaymentController extends Controller
             return redirect(route('user.credit.plan'))->with('success', 'Credit Successful');
         }
 
+    }
 
+
+    public function checkout_submit(Request $request)
+    {
+        $order = $this->create_order($request);
+        $order_details = $this->create_order_details($request, $order);
+        $payment = $this->makePayment($request);
+
+        return back()->with('success', 'Payment Successful');
+    }
+
+    private function create_order($request)
+    {
+        $new_order = new user_order();
+        $new_order->user_id = Auth::user()->id;
+        $new_order->order_id = time() . Auth::user()->id . rand(0000, 9999);
+        $new_order->total_amount = number_format($request->plan_amount, 2);
+        $new_order->name = $request->name;
+        $new_order->email = $request->email;
+        $new_order->phone = $request->phone;
+        $new_order->address = $request->address;
+        $new_order->save();
+
+        return $new_order;
+    }
+
+    private function create_order_details($request, $order)
+    {
+        $cards = Cart::content();
+
+        foreach ($cards as $card) {
+            $order_detais = new user_order_detail();
+            $order_detais->user_id = Auth::user()->id;
+            $order_detais->order_id = $order->id;
+            $order_detais->plan_id = $card->id;
+            $order_detais->amount = $card->price;
+            $order_detais->plan_type = $card->options->type;
+            $order_detais->save();
+        }
+
+        return 'done';
     }
 
     private function makePayment($request)

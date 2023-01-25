@@ -60,6 +60,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/view/cart', [Controllers\User\UserBillingController::class, 'view_cart'])->name('user.view.cart');
         Route::get('/cart/data/remove/{id}', [Controllers\User\UserBillingController::class, 'cart_data_remove'])->name('user.cart.remove');
         Route::get('/user/checkout', [Controllers\User\UserBillingController::class, 'checkout_user'])->name('user.checkout');
+        Route::post('/user/checkout/submit', [Controllers\User\UserPaymentController::class, 'checkout_submit'])->name('user.checkout.submit');
+
+        //invoice
+        Route::get('/invoice', [Controllers\User\UserBillingController::class, 'user_invoice'])->name('user.invoice');
+        Route::get('/invoice/details/{id}', [Controllers\User\UserBillingController::class, 'user_invoice_details'])->name('user.invoice.details');
 
     });
 });
