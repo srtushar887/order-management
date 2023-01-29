@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\all_plan;
 use App\Models\subscription_plan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class AdminController extends Controller
 
 
         $users = User::select('id')->count();
-        $active_plan = subscription_plan::where('plan_status', 0)->count();
+        $active_plan = all_plan::where('plan_status', 0)->count();
         return view('admin.index', compact('users', 'active_plan'));
     }
 }

@@ -21,7 +21,7 @@
                                         <select class="form-control" name="user_id" required>
                                             <option value="">select any</option>
                                             @foreach($plans as $plan)
-                                            <option value="{{$plan->id}}">{{$plan->plan_name}}</option>
+                                                <option value="{{$plan->id}}">{{$plan->plan_name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -42,8 +42,8 @@
                                         <label for="exampleInputEmail1">Status</label>
                                         <select class="form-control" name="status" required>
                                             <option value="">select any</option>
-                                            <option value="1">Active</option>
-                                            <option value="0">InActive</option>
+                                            <option value="0">Active</option>
+                                            <option value="1">InActive</option>
                                         </select>
                                     </div>
                                 </div>
@@ -59,16 +59,7 @@
                 </div>
 
 
-
-
-
-
-
-
-
             </div>
-
-
 
 
         </div>

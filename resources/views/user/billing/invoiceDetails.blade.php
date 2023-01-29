@@ -233,43 +233,19 @@
                     <div class="row text-600 text-white bgc-default-tp1 py-25">
                         <div class="d-none d-sm-block col-1">#</div>
                         <div class="col-9 col-sm-5">Description</div>
-                        <div class="d-none d-sm-block col-4 col-sm-2">Qty</div>
-                        <div class="d-none d-sm-block col-sm-2">Unit Price</div>
                         <div class="col-2">Amount</div>
                     </div>
 
                     <div class="text-95 text-secondary-d3">
-                        <div class="row mb-2 mb-sm-0 py-25">
-                            <div class="d-none d-sm-block col-1">1</div>
-                            <div class="col-9 col-sm-5">Domain registration</div>
-                            <div class="d-none d-sm-block col-2">2</div>
-                            <div class="d-none d-sm-block col-2 text-95">$10</div>
-                            <div class="col-2 text-secondary-d2">$20</div>
-                        </div>
+                        @foreach($orders_details as $details)
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">1</div>
+                                <div class="col-9 col-sm-5">{{$details->plan->plan_name ?? ''}}</div>
+                                <div class="d-none d-sm-block col-2 text-95">
+                                    ${{number_format($details->plan->plan_amount) ?? ''}}</div>
+                            </div>
+                        @endforeach
 
-                        <div class="row mb-2 mb-sm-0 py-25 bgc-default-l4">
-                            <div class="d-none d-sm-block col-1">2</div>
-                            <div class="col-9 col-sm-5">Web hosting</div>
-                            <div class="d-none d-sm-block col-2">1</div>
-                            <div class="d-none d-sm-block col-2 text-95">$15</div>
-                            <div class="col-2 text-secondary-d2">$15</div>
-                        </div>
-
-                        <div class="row mb-2 mb-sm-0 py-25">
-                            <div class="d-none d-sm-block col-1">3</div>
-                            <div class="col-9 col-sm-5">Software development</div>
-                            <div class="d-none d-sm-block col-2">--</div>
-                            <div class="d-none d-sm-block col-2 text-95">$1,000</div>
-                            <div class="col-2 text-secondary-d2">$1,000</div>
-                        </div>
-
-                        <div class="row mb-2 mb-sm-0 py-25 bgc-default-l4">
-                            <div class="d-none d-sm-block col-1">4</div>
-                            <div class="col-9 col-sm-5">Consulting</div>
-                            <div class="d-none d-sm-block col-2">1 Year</div>
-                            <div class="d-none d-sm-block col-2 text-95">$500</div>
-                            <div class="col-2 text-secondary-d2">$500</div>
-                        </div>
                     </div>
 
                     <div class="row border-b-2 brc-default-l2"></div>
@@ -313,25 +289,19 @@
                                     SubTotal
                                 </div>
                                 <div class="col-5">
-                                    <span class="text-120 text-secondary-d1">$2,250</span>
+                                    <span
+                                        class="text-120 text-secondary-d1">${{number_format($orders->total_amount,2)}}</span>
                                 </div>
                             </div>
 
-                            <div class="row my-2">
-                                <div class="col-7 text-right">
-                                    Tax (10%)
-                                </div>
-                                <div class="col-5">
-                                    <span class="text-110 text-secondary-d1">$225</span>
-                                </div>
-                            </div>
 
                             <div class="row my-2 align-items-center bgc-primary-l3 p-2">
                                 <div class="col-7 text-right">
                                     Total Amount
                                 </div>
                                 <div class="col-5">
-                                    <span class="text-150 text-success-d3 opacity-2">$2,475</span>
+                                    <span
+                                        class="text-150 text-success-d3 opacity-2">${{number_format($orders->total_amount,2)}}</span>
                                 </div>
                             </div>
                         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\all_plan;
 use App\Models\credit_plan;
 use App\Models\subscription_plan;
 use App\Models\user_order;
@@ -15,27 +16,23 @@ class UserBillingController extends Controller
 {
     public function billing()
     {
-        $plan = subscription_plan::all();
-        $credit = credit_plan::all();
+        $plan = all_plan::active()->subscriptionPlan()->get();
+        $credit = all_plan::active()->creditPlan()->get();
         return view('user.billing.billing', compact('plan', 'credit'));
     }
 
 
-    public function add_cart($plan_id, $type)
+    public function add_cart($plan_id)
     {
 
-        if ($type == 1) {
-            $plan = subscription_plan::where('id', $plan_id)->first();
-        } else {
-            $plan = credit_plan::where('id', $plan_id)->first();
-        }
+        $plan = all_plan::where('id', $plan_id)->first();
 
         $data['qty'] = 1;
         $data['id'] = $plan->id;
         $data['name'] = $plan->plan_name;
         $data['price'] = $plan->plan_amount;
         $data['weight'] = 0;
-        $data['options']['type'] = $type;
+        $data['options']['type'] = $plan->plan_type;
 
         Cart::add($data);
         return back()->with('success', 'Cart Added');
@@ -71,8 +68,8 @@ class UserBillingController extends Controller
 
     public function user_invoice_details($id)
     {
-        $orders = user_order::where('id', $id)->paginate(20);
-        $orders_details = user_order_detail::where('order_id', $id)->get();
+        $orders = user_order::where('id', $id)->first();
+        $orders_details = user_order_detail::where('order_id', $id)->with('plan')->get();
         return view('user.billing.invoiceDetails', compact('orders', 'orders_details'));
     }
 }

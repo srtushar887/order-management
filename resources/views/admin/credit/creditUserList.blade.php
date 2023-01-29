@@ -51,7 +51,7 @@
                                 <td>{{$plan->user->name ?? ''}}</td>
                                 <td>{{$plan->plan->plan_name ?? ''}}</td>
                                 <td>${{number_format($plan->plan->plan_amount,2)}}</td>
-                                <td>{{$plan->credit}}</td>
+                                <td>{{$plan->plan->plan_credit ?? ''}}</td>
                                 <td>{{\Carbon\Carbon::parse($plan->purchase_date)->format('Y-m-d')}}</td>
 
                             </tr>

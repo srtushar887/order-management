@@ -155,7 +155,7 @@
                                         <div class="separator clear-left">
                                             <p class="btn-add">
                                                 <i class="fa fa-shopping-cart"></i><a
-                                                    href="{{route('user.add.cart',['plan_id'=>$p->id,'type'=>1])}}"
+                                                    href="{{route('user.add.cart',$p->id)}}"
                                                     class="hidden-sm">Add to cart</a></p>
                                         </div>
                                         <div class="clearfix">
@@ -211,7 +211,7 @@
                                         <div class="separator clear-left">
                                             <p class="btn-add">
                                                 <i class="fa fa-shopping-cart"></i><a
-                                                    href="{{route('user.add.cart',['plan_id'=>$p->id,'type'=>2])}}"
+                                                    href="{{route('user.add.cart',$cre->id)}}"
                                                     class="hidden-sm">Add to cart</a></p>
                                         </div>
                                         <div class="clearfix">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\all_plan;
 use App\Models\credit_plan;
 use App\Models\subscription_plan;
 use App\Models\User;
@@ -19,11 +20,7 @@ class UserPaymentController extends Controller
 {
     public function pay_stripe($id, $type)
     {
-        if ($type == 1) {
-            $plan = subscription_plan::where('id', $id)->first();
-        } else {
-            $plan = credit_plan::where('id', $id)->first();
-        }
+        $plan = all_plan::where('id', $id)->first();
 
         $plan_type = $type;
         return view('user.payment.stripe', compact('plan', 'plan_type'));
@@ -31,15 +28,43 @@ class UserPaymentController extends Controller
 
     public function pay_stripe_submit(Request $request)
     {
+
+        $this->create_single_order($request);
         $this->makePayment($request);
 
         if ($request->plan_type == 1) {
             $this->makeSubscriptionPlan($request);
             return redirect(route('user.my.plan'));
+        } elseif ($request->plan_type == 2) {
+            $this->makeCreditPlan($request);
+            return redirect(route('user.credit.plan'))->with('success', 'Credit Successful');
         } else {
             $this->makeCreditPlan($request);
             return redirect(route('user.credit.plan'))->with('success', 'Credit Successful');
         }
+
+    }
+
+
+    private function create_single_order($request)
+    {
+        $new_order = new user_order();
+        $new_order->user_id = Auth::user()->id;
+        $new_order->order_id = time() . Auth::user()->id . rand(0000, 9999);
+        $new_order->total_amount = number_format($request->plan_amount, 2);
+        $new_order->name = Auth::user()->name;
+        $new_order->email = Auth::user()->email;
+        $new_order->save();
+
+
+        $order_detais = new user_order_detail();
+        $order_detais->user_id = Auth::user()->id;
+        $order_detais->order_id = $new_order->id;
+        $order_detais->plan_id = $request->plan_id;
+        $order_detais->amount = $request->plan_amount;
+        $order_detais->plan_type = $request->plan_type;
+        $order_detais->save();
+        return 'done';
 
     }
 
@@ -115,19 +140,21 @@ class UserPaymentController extends Controller
 
     private function makeSubscriptionPlan($request)
     {
-        $plan_data = subscription_plan::where('id', $request->plan_id)->first();
+        $plan_data = all_plan::where('id', $request->plan_id)->first();
         $check_exists = user_plan::where('user_id', Auth::user()->id)->first();
         if ($check_exists) {
             $check_exists->plan_id = $plan_data->id;
-            $check_exists->status = 1;
+            $check_exists->status = 0;
             $check_exists->purchase_date = Carbon::now();
+            $check_exists->plan_type = $plan_data->plan_type;
             $check_exists->save();
         } else {
             $new_user_plan = new user_plan();
             $new_user_plan->user_id = Auth::user()->id;
             $new_user_plan->plan_id = $plan_data->id;
-            $new_user_plan->status = 1;
+            $new_user_plan->status = 0;
             $new_user_plan->purchase_date = Carbon::now();
+            $new_user_plan->plan_type = $plan_data->plan_type;
             $new_user_plan->save();
         }
 
@@ -135,13 +162,14 @@ class UserPaymentController extends Controller
 
     private function makeCreditPlan($request)
     {
-        $credit_plan = credit_plan::where('id', $request->plan_id)->first();
+        $credit_plan = all_plan::where('id', $request->plan_id)->first();
 
-        $user_credit_plan = new user_credit_plan();
+        $user_credit_plan = new user_plan();
         $user_credit_plan->user_id = Auth::user()->id;
         $user_credit_plan->plan_id = $credit_plan->id;
-        $user_credit_plan->credit = $credit_plan->plan_credit;
         $user_credit_plan->status = 0;
+        $user_credit_plan->purchase_date = Carbon::now();
+        $user_credit_plan->plan_type = $credit_plan->plan_type;
         $user_credit_plan->save();
 
 

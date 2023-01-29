@@ -5,19 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class user_plan extends Model
+class all_plan extends Model
 {
     use HasFactory;
 
-    public function plan()
+
+    public function scopeActive($query)
     {
-        return $this->hasOne(all_plan::class, 'id', 'plan_id');
+        return $query->where('plan_status', 0);
     }
 
-    public function user()
+    public function scopeInActive($query)
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $query->where('plan_status', 1);
     }
+
 
     public function scopeSubscriptionPlan($query)
     {

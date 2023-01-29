@@ -54,9 +54,9 @@
                                 </td>
                                 <td>
                                     @if($plan->status == 0 )
-                                        InActive
-                                    @elseif($plan->status == 1 )
                                         Active
+                                    @elseif($plan->status == 1 )
+                                        InActive
                                     @else
                                         Not Set
                                     @endif
@@ -64,7 +64,7 @@
                                 <td>{{ \Carbon\Carbon::parse($plan->created_date)->format('Y-m-d')}}</td>
                                 <td>
                                     @if($plan->status != 1 )
-                                        <a href="{{route('user.payment.stripe',$plan->plan_id)}}">
+                                        <a href="{{route('user.payment.stripe',['id'=>$plan->plan_id,'type'=>$plan->plan->plan_type])}}">
                                             <button class="btn btn-primary btn-sm"><i class="fas fa-dollar-sign"></i>
                                             </button>
                                         </a>

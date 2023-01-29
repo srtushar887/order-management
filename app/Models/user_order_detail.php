@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class user_order_detail extends Model
 {
     use HasFactory;
+
+    public function plan()
+    {
+        return $this->hasOne(all_plan::class, 'id', 'plan_id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }

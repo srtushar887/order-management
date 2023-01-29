@@ -56,7 +56,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         //billing
         Route::get('/billing', [Controllers\User\UserBillingController::class, 'billing'])->name('user.billing');
-        Route::get('/add/cart/{plan_id}/{type}', [Controllers\User\UserBillingController::class, 'add_cart'])->name('user.add.cart');
+        Route::get('/add/cart/{plan_id}', [Controllers\User\UserBillingController::class, 'add_cart'])->name('user.add.cart');
         Route::get('/view/cart', [Controllers\User\UserBillingController::class, 'view_cart'])->name('user.view.cart');
         Route::get('/cart/data/remove/{id}', [Controllers\User\UserBillingController::class, 'cart_data_remove'])->name('user.cart.remove');
         Route::get('/user/checkout', [Controllers\User\UserBillingController::class, 'checkout_user'])->name('user.checkout');

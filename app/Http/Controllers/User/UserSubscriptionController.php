@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\all_plan;
 use App\Models\credit_plan;
 use App\Models\subscription_plan;
 use App\Models\user_plan;
@@ -14,13 +15,13 @@ class UserSubscriptionController extends Controller
     public function plan_list()
     {
         $user_plan_count = user_plan::where('user_id', Auth::user()->id)->count();
-        $plans = subscription_plan::active()->orderBy('id', 'desc')->paginate(20);
+        $plans = all_plan::active()->subscriptionPlan()->orderBy('id', 'desc')->paginate(20);
         return view('user.subscription.planList', compact('plans', 'user_plan_count'));
     }
 
     public function plan_choose($id)
     {
-        $plan = subscription_plan::where('id', $id)->first();
+        $plan = all_plan::where('id', $id)->first();
         return view('user.subscription.planChoose', compact('plan'));
     }
 
@@ -45,7 +46,7 @@ class UserSubscriptionController extends Controller
 
     public function credit_plan()
     {
-        $plans = credit_plan::where('plan_status', 0)->paginate(20);
+        $plans = all_plan::active()->creditPlan()->orderBy('id', 'desc')->paginate(20);
         return view('user.credit.planList', compact('plans'));
     }
 

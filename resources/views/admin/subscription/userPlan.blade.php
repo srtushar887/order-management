@@ -41,6 +41,7 @@
                             <th>User Name</th>
                             <th>Plan Name</th>
                             <th>Plan Amount</th>
+                            <th>Plan Type</th>
                             <th>Status</th>
                             <th>Created Date</th>
                             <th>Action</th>
@@ -54,10 +55,19 @@
                                     <td>{{$plan->plan->plan_name ?? ''}}</td>
                                     <td>${{number_format($plan->plan->plan_amount,2)}}</td>
                                     <td>
+                                        @if($plan->plan_type == 1)
+                                            Subscription
+                                        @elseif($plan->plan_type == 2)
+                                            Credit
+                                        @else
+                                            Not Set
+                                        @endif
+                                    </td>
+                                    <td>
                                         @if($plan->status == 0)
-                                            InActive
-                                        @elseif($plan->status == 1)
                                             Active
+                                        @elseif($plan->status == 1)
+                                            InActive
                                         @else
                                             Not Set
                                         @endif
@@ -88,10 +98,10 @@
                                                         <label>Plan Status</label>
                                                         <select class="form-control" name="plan_status">
                                                             <option value="">select any</option>
-                                                            <option value="1" {{$plan->status == 1 ?'selected' : ''}}>
+                                                            <option value="0" {{$plan->status == 0 ?'selected' : ''}}>
                                                                 Active
                                                             </option>
-                                                            <option value="0" {{$plan->status == 0 ?'selected' : ''}}>
+                                                            <option value="1" {{$plan->status == 1 ?'selected' : ''}}>
                                                                 Inactive
                                                             </option>
                                                         </select>
