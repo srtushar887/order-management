@@ -66,6 +66,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/invoice', [Controllers\User\UserBillingController::class, 'user_invoice'])->name('user.invoice');
         Route::get('/invoice/details/{id}', [Controllers\User\UserBillingController::class, 'user_invoice_details'])->name('user.invoice.details');
 
+        //change password
+        Route::get('/change/password', [Controllers\User\UserController::class, 'change_password'])->name('user.change.password');
+        Route::post('/change/password/save', [Controllers\User\UserController::class, 'change_password_save'])->name('user.change.pass.save');
+
     });
 });
 Route::get('/admin/logout', [Controllers\Auth\CustomLoginController::class, 'admin_logout'])->name('admin.logout');
@@ -98,5 +102,9 @@ Route::group(['middleware' => ['auth:admin']], function () {
         //user manage
         Route::get('/user/create', [Controllers\Admin\AdminUserController::class, 'create_user'])->name('admin.create.user');
         Route::post('/user/create/save', [Controllers\Admin\AdminUserController::class, 'create_user_save'])->name('admin.user.save');
+
+        //change password
+        Route::get('/change/password', [Controllers\Admin\AdminController::class, 'change_password'])->name('admin.change.password');
+        Route::post('/change/password/save', [Controllers\Admin\AdminController::class, 'change_password_save'])->name('admin.change.pass.save');
     });
 });
